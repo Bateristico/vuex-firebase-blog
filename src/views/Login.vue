@@ -3,28 +3,42 @@
     <h3>Login</h3>
 
     <label for="email">Email:</label>
-    <input type="email" name="email" v-model="email" required>
+    <input type="email" name="email" v-model="email" required />
 
     <label for="email">Password:</label>
-    <input type="password" name="password" v-model="password" required>
+    <input type="password" name="password" v-model="password" required />
 
     <button>Login</button>
+    <div v-if="error">{{ error }}</div>
   </form>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
-    const email = ref('')
-    const password = ref('')
+    const email = ref('');
+    const password = ref('');
+    const error = ref(null);
 
-    const handleSubmit = () => {
-      console.log(email.value, password.value)
-    }
+    const store = useStore();
+    const router = useRouter();
 
-    return { handleSubmit, email, password }
+    const handleSubmit = async () => {
+      try {
+        // console.log(email.value, password.value)
+        await store.dispatch('login', { email: email.value, password: password.value });
+        router.push('/');
+      } catch (err) {
+        console.log(err);
+        error.value = err.message;
+      }
+    };
+
+    return { handleSubmit, email, password, error };
   }
-}
+};
 </script>
