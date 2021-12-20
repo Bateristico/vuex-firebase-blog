@@ -32,9 +32,7 @@ export default {
 
     // access to the store
     const store = useStore();
-
     console.log(store.state.user);
-    store.commit('setUser', 'camilo');
 
     return {
       blogs
